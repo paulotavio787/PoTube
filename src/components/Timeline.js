@@ -10,6 +10,11 @@ export const StyledTimeline = styled.div`
     margin-bottom: 16px;
     text-transform: capitalize;
   }
+  .notF {
+    text-align: center;
+    text-transform: none;
+    color: #303030
+  }
   img {
     aspect-ratio: 16/9;
     font-weight: 500;
@@ -33,14 +38,30 @@ export const StyledTimeline = styled.div`
       grid-auto-columns: minmax(200px,1fr);
       overflow-x: scroll;
       scroll-snap-type: x mandatory;
+      padding-bottom: 10px;
+      ::-webkit-scrollbar{
+        background-color: transparent;
+        height: 8px;
+        border-radius: 5px;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 6px;
+      }
       a {
         scroll-snap-align: start;
         span {
           padding-top: 8px;
           display: block;
           padding-right: 24px;
-          color: ${({ theme }) => theme.textColorBase || "#222222"};
+          color: ${({ theme }) => theme.textColorBase};
         }
+      }
+    }
+    div:hover {
+      ::-webkit-scrollbar-thumb {
+        background-color: ${({ theme }) => theme.backgroundLevel1};
       }
     }
   }
