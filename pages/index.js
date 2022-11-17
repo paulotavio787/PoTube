@@ -82,7 +82,7 @@ function Header() {
 
 function Timeline({searchValue, ...propriedades}) {
     const playlistNames = Object.keys(propriedades.playlists);
-    var i = 0
+    var playlistNumber = 0
     // Statement
     // Retorno por expressão
     return (
@@ -100,8 +100,8 @@ function Timeline({searchValue, ...propriedades}) {
                 })
 
                 if (videosStatus === false) {
-                    i++
-                    if (i === 3) {
+                    playlistNumber++
+                    if (playlistNumber === 3) {
                         return (
                             <section key={propriedades}>
                                 <h2 className="notF">This video was not found</h2>
