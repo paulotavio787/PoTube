@@ -3,14 +3,30 @@ import styled from "styled-components";
 import Menu from "../src/components/Menu/Menu";
 import { StyledTimeline } from "../src/components/Timeline";
 import React from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const PROJECT_URL = 'https://xacfsqxzjejmcrizberq.supabase.co'
+const PUBLIC_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhY2ZzcXh6amVqbWNyaXpiZXJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njg5NjY3MDEsImV4cCI6MTk4NDU0MjcwMX0.H8s4yvzycKJPgS11SKaReL9TplqEADw789VoeEpyI7E'
+const supabase = createClient(PROJECT_URL, PUBLIC_KEY)
 
 function HomePage() {
-    const estilosDaHomePage = {
-        // backgroundColor: "red" 
-    };
+
     const [valorDoFiltro, setValorDoFiltro] = React.useState("")
+    const [playlists, setPlaylist] = React.useState({})
+
+    React.useEffect(() => {
+        supabase.from('video').select('*').then((data) => {
+            const newPlaylist = { ...playlists }
+            data.data.forEach((video) => {
+                video.playlist in newPlaylist ? null : newPlaylist[video.playlist] = []
+                newPlaylist[video.playlist].push(video)
+            })
+            setPlaylist(newPlaylist);
+        })
+    }, [])
 
 
+    config.playlists = playlists
 
     return (
         <>
@@ -22,7 +38,7 @@ function HomePage() {
             }}>
                 <Menu valorDoFiltro={valorDoFiltro} setValorDoFiltro={setValorDoFiltro} />
                 <Header />
-                <Timeline searchValue={valorDoFiltro} playlists={config.playlists} />
+                <Timeline searchValue={valorDoFiltro} playlists={playlists} />
             </div>
         </>
     );
@@ -40,7 +56,7 @@ export default HomePage
 
 
 const StyledHeader = styled.div`
-    background-color: ${({theme}) => theme.backgroundLevel1};
+    background-color: ${({ theme }) => theme.backgroundLevel1};
     img {
         width: 80px;
         height: 80px;
@@ -80,7 +96,8 @@ function Header() {
     )
 }
 
-function Timeline({searchValue, ...propriedades}) {
+function Timeline({ searchValue, ...propriedades }) {
+    var count = 0
     const playlistNames = Object.keys(propriedades.playlists);
     var playlistNumber = 0
     // Statement
